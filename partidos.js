@@ -15,26 +15,47 @@ client.connect(function (err, client) {
 
     const db = client.db(dbName);
 
-    var plantilla;
 
-    db.collection("equipos").aggregate([
+    resultArray = db.collection("equipos").aggregate([
         { '$project': { "plantilla.jugadores": 1, "plantilla.edicion_torneo": 1, "plantilla._id": 1 } }
     ])
-        .toArray(function (err, doc) {
-            //console.log( doc)
-            //doc.forEach(element => console.log(element.plantilla.jugadores.pos)) 
-            local = { "id_equipo": doc[0]._id, "id_plantilla": doc[0].plantilla[0]._id, "jugadores": doc[0].plantilla[0].jugadores }
-            visitante = { "id_equipo": doc[1]._id, "id_plantilla": doc[1].plantilla[0]._id, "jugadores": doc[1].plantilla[0].jugadores }
-            
-            console.log(JSON.stringify(generaPartido(local, visitante, "2020/10/10", "2020/10/10"), undefined , 3))
 
-            //Repetir
-            local = { "id_equipo": doc[0]._id, "id_plantilla": doc[0].plantilla[0]._id, "jugadores": doc[0].plantilla[0].jugadores }
-            visitante = { "id_equipo": doc[1]._id, "id_plantilla": doc[1].plantilla[0]._id, "jugadores": doc[1].plantilla[0].jugadores }
-            
-            console.log(JSON.stringify(generaPartido(local, visitante, "2020/10/10", "2020/10/10"), undefined , 3))
+    var result = resultArray.toArray(function (err, doc) {
+        //console.log( doc)
+        //doc.forEach(element => console.log(element.plantilla.jugadores.pos)) 
+        var objPartidos = [
+            generaPartido( {"id_equipo":doc[0]._id,"id_plantilla":doc[0].plantilla[0]._id,"jugadores":doc[0].plantilla[0].jugadores}, 
+                            {"id_equipo":doc[1]._id,"id_plantilla":doc[1].plantilla[0]._id,"jugadores":doc[1].plantilla[0].jugadores}, 
+                            "2020/10/10", "2020/10/10"),
+            generaPartido( {"id_equipo":doc[2]._id,"id_plantilla":doc[2].plantilla[0]._id,"jugadores":doc[2].plantilla[0].jugadores}, 
+                            {"id_equipo":doc[3]._id,"id_plantilla":doc[3].plantilla[0]._id,"jugadores":doc[3].plantilla[0].jugadores}, 
+                            "2020/10/10", "2020/10/10"),
+            generaPartido( {"id_equipo":doc[4]._id,"id_plantilla":doc[4].plantilla[0]._id,"jugadores":doc[4].plantilla[0].jugadores}, 
+                            {"id_equipo":doc[5]._id,"id_plantilla":doc[5].plantilla[0]._id,"jugadores":doc[5].plantilla[0].jugadores}, 
+                            "2020/10/10", "2020/10/10"),
+            generaPartido( {"id_equipo":doc[6]._id,"id_plantilla":doc[6].plantilla[0]._id,"jugadores":doc[6].plantilla[0].jugadores}, 
+                            {"id_equipo":doc[7]._id,"id_plantilla":doc[7].plantilla[0]._id,"jugadores":doc[7].plantilla[0].jugadores}, 
+                            "2020/10/10", "2020/10/10"),
+            generaPartido( {"id_equipo":doc[8]._id,"id_plantilla":doc[8].plantilla[0]._id,"jugadores":doc[8].plantilla[0].jugadores}, 
+                            {"id_equipo":doc[9]._id,"id_plantilla":doc[9].plantilla[0]._id,"jugadores":doc[9].plantilla[0].jugadores}, 
+                            "2020/10/10", "2020/10/10"),
+            generaPartido( {"id_equipo":doc[10]._id,"id_plantilla":doc[10].plantilla[0]._id,"jugadores":doc[10].plantilla[0].jugadores}, 
+                            {"id_equipo":doc[11]._id,"id_plantilla":doc[11].plantilla[0]._id,"jugadores":doc[11].plantilla[0].jugadores}, 
+                            "2020/10/10", "2020/10/10")
+        ]
+        return objPartidos;
+    })
 
-        })
+
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+    console.log(result)
+    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+
+    db.collection("partidos").insertMany(result, function(err, res) {
+        assert.equal(null, err);
+        console.log(res.insertedIds)
+        console.log("Insertado: partidos");
+    });
     client.close();
 
 });
@@ -117,8 +138,8 @@ function generaPartido(local, visitante, _inicio, _fin) {
     }
 
 
+    //"_id": new ObjectID(),
     var objPartido = {
-        "_id": new ObjectID(),
         inicio: _inicio,
         fin: _fin,
         estadio: _estadio,
