@@ -25,12 +25,14 @@ client.connect(function (err, client) {
             //doc.forEach(element => console.log(element.plantilla.jugadores.pos)) 
             local = { "id_equipo": doc[0]._id, "id_plantilla": doc[0].plantilla[0]._id, "jugadores": doc[0].plantilla[0].jugadores }
             visitante = { "id_equipo": doc[1]._id, "id_plantilla": doc[1].plantilla[0]._id, "jugadores": doc[1].plantilla[0].jugadores }
-            console.log(generaPartido(local, visitante, "2020/10/10", "2020/10/10"))
+            
+            console.log(JSON.stringify(generaPartido(local, visitante, "2020/10/10", "2020/10/10"), undefined , 3))
 
             //Repetir
             local = { "id_equipo": doc[0]._id, "id_plantilla": doc[0].plantilla[0]._id, "jugadores": doc[0].plantilla[0].jugadores }
             visitante = { "id_equipo": doc[1]._id, "id_plantilla": doc[1].plantilla[0]._id, "jugadores": doc[1].plantilla[0].jugadores }
-            console.log(generaPartido(local, visitante, "2020/10/10", "2020/10/10"))
+            
+            console.log(JSON.stringify(generaPartido(local, visitante, "2020/10/10", "2020/10/10"), undefined , 3))
 
         })
     client.close();
@@ -56,7 +58,7 @@ console.log("--------------------------------------------")
 
 
 function generaPartido(local, visitante, _inicio, _fin) {
-    tarjetas = ["Amarilla", "Roja", "Azul"];
+    tarjetas = ["Amarilla", "Roja", "-", "-", "-", "-", "-"];
     lugar_tiros = ["Tiro libre dentro del área penal", "Tiro libre directo", "Tiro libre fuera del área de penal", "Penal"];
     arbitros = ["Juan", "Pepe", "Carlos", "Pedro", "Victor", "Roberto", "Simón", "Daniel", "Jhon"];
     ubicaciones = ["San Petersburgo, Rusia", "Foxborough, Estados Unidos", "Seattle, Estados Unidos", "Munich, Alemania", "Atenas, Grecia"];
@@ -72,37 +74,46 @@ function generaPartido(local, visitante, _inicio, _fin) {
         "ubicacion": ubicaciones[Math.floor(Math.random() * ubicaciones.length)],
         "aforo": Math.round(Math.random() * (90000 - 30000) + 30000)
     }
-
     _minuto = Math.round(Math.random() * (90 - 1) + 1);
 
-    arrLocTiros = [];
-    arrLocSustituciones = [];
-    arrLocFaltas = [];
-    arrLocGoles = [];
-    for (i = 0, s = Math.round(Math.random() * (6 - 1) + 1); i < s; i++) {
+
+    _nIncidencias =  Math.round(Math.random() * (4 - 0) + 0); 
+    _arrayIncidencias = [
+        {
+            tiros:[],
+            sustituciones:[],
+            faltas:[],
+            goles:[],
+        },
+        {
+            tiros:[],
+            sustituciones:[],
+            faltas:[],
+            goles:[],
+        }
+    ]
+    //Incidencias Local
+    for (i = 0, s = Math.round(Math.random() * (_nIncidencias - 1) + 1); i < s; i++) {
         _tarjeta = tarjetas[Math.floor(Math.random() * tarjetas.length)]
         _lugar_tiro = lugar_tiros[Math.floor(Math.random() * lugar_tiros.length)]
         _minuto = Math.round(Math.random() * (90 - 1) + 1);
 
-        arrLocTiros.push({ id_jugador: local.jugadores[Math.floor(Math.random() * 7)], lugar: _lugar_tiro, minuto: _minuto });
-        arrLocSustituciones.push({ sale_id_jug: local.jugadores[Math.floor(Math.random() * 7)], entra_id_jug: local.jugadores[Math.floor(Math.random() * 7)], minuto: _minuto });
-        arrLocFaltas.push({ id_causante: local.jugadores[Math.floor(Math.random() * 7)], id_afectado: visitante.jugadores[Math.floor(Math.random() * 7)], tarjeta: _tarjeta, minuto: _minuto });
-        arrLocGoles.push({ id_jugador: local.jugadores[Math.floor(Math.random() * 7)], minuto: _minuto });
+        _arrayIncidencias[0].tiros.push({ id_jugador: local.jugadores[Math.floor(Math.random() * 7)], lugar: _lugar_tiro, minuto: _minuto });
+        _arrayIncidencias[0].sustituciones.push({ sale_id_jug: local.jugadores[Math.floor(Math.random() * 7)], entra_id_jug: local.jugadores[Math.floor(Math.random() * 7)], minuto: _minuto });
+        _arrayIncidencias[0].faltas.push({ id_causante: local.jugadores[Math.floor(Math.random() * 7)], id_afectado: visitante.jugadores[Math.floor(Math.random() * 7)], tarjeta: _tarjeta, minuto: _minuto });
+        _arrayIncidencias[0].goles.push({ id_jugador: local.jugadores[Math.floor(Math.random() * 7)], minuto: _minuto });
     }
-    arrVisTiros = [];
-    arrVisSustituciones = [];
-    arrVisFaltas = [];
-    arrVisGoles = [];
 
-    for (i = 0, s = Math.round(Math.random() * (6 - 1) + 1); i < s; i++) {
+    //Incidencias visitante
+    for (i = 0, s = Math.round(Math.random() * (_nIncidencias - 1) + 1); i < s; i++) {
         _tarjeta = tarjetas[Math.floor(Math.random() * tarjetas.length)]
         _lugar_tiro = lugar_tiros[Math.floor(Math.random() * lugar_tiros.length)]
         _minuto = Math.round(Math.random() * (90 - 1) + 1);
 
-        arrVisTiros.push({ id_jugador: visitante.jugadores[Math.floor(Math.random() * 7)], lugar: _lugar_tiro, minuto: _minuto });
-        arrVisSustituciones.push({ sale_id_jug: visitante.jugadores[Math.floor(Math.random() * 7)], entra_id_jug: visitante.jugadores[Math.floor(Math.random() * 7)], minuto: _minuto });
-        arrVisFaltas.push({ id_causante: visitante.jugadores[Math.floor(Math.random() * 7)], id_afectado: local.jugadores[Math.floor(Math.random() * 7)], tarjeta: _tarjeta, minuto: _minuto });
-        arrVisGoles.push({ id_jugador: visitante.jugadores[Math.floor(Math.random() * 7)], minuto: _minuto });
+        _arrayIncidencias[1].tiros.push({ id_jugador: visitante.jugadores[Math.floor(Math.random() * 7)], lugar: _lugar_tiro, minuto: _minuto });
+        _arrayIncidencias[1].sustituciones.push({ sale_id_jug: visitante.jugadores[Math.floor(Math.random() * 7)], entra_id_jug: visitante.jugadores[Math.floor(Math.random() * 7)], minuto: _minuto });
+        _arrayIncidencias[1].faltas.push({ id_causante: visitante.jugadores[Math.floor(Math.random() * 7)], id_afectado: local.jugadores[Math.floor(Math.random() * 7)], tarjeta: _tarjeta, minuto: _minuto });
+        _arrayIncidencias[1].goles.push({ id_jugador: visitante.jugadores[Math.floor(Math.random() * 7)], minuto: _minuto });
     }
 
 
@@ -115,22 +126,12 @@ function generaPartido(local, visitante, _inicio, _fin) {
         equipoLocal: {
             id_equipo: local.id_equipo,
             id_plantilla: local.id_plantilla,
-            incidencias: {
-                arrLocTiros,
-                arrLocSustituciones,
-                arrLocFaltas,
-                arrLocGoles
-            }
+            incidencias: _arrayIncidencias[0]
         },
         equipoVisitante: {
             id_equipo: visitante.id_equipo,
             id_plantilla: visitante.id_plantilla,
-            incidencias: {
-                arrVisTiros,
-                arrVisSustituciones,
-                arrVisFaltas,
-                arrVisGoles
-            }
+            incidencias: _arrayIncidencias[1]
         }
     }
 
