@@ -60,7 +60,8 @@ client.connect(function(err, client) {
   }); 
   db.equipos.find( {"_id": ObjectId("5fa725b51b24c432a803bec9")} )
   
-  db.Equipos.aggregate([{$match: {_id: ObjectId("5fa1db095675be151cefbf0a")}},{$lookup: {from: 'Partidos',localField: '_id',foreignField: 'eLocal',as: 'equi'}}]).pretty();
+  db.Equipos.aggregate([{$match: {_id: ObjectId("5fa1db095675be151cefbf0a")}},
+  {$lookup: {from: 'Partidos',localField: '_id',foreignField: 'eLocal',as: 'equi'}}]).pretty();
   
   db.getCollection('requests').find({
     "sections.questions.answerOptions.fieldName":"Global Deployment?"
