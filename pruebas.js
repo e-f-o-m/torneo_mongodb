@@ -12,6 +12,7 @@ client.connect(function (err, client) {
 
     //db.people.update({name: "John"}, {$push: {friends: {firstName: "Harry", lastName: "Potter"}}});
 
+    //iginore
     //{ "ediciones": {$elemMatch: {"nombre_e":"Copa Municipal de Fútbol de 2021"} }},
     //{$addFields: {"ediciones.$.semifinal":{"sig_ccccc":"cccccc"}} },
 
