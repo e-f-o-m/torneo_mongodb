@@ -10,42 +10,114 @@ client.connect(function(err, client) {
   console.log("--- Connected correctly to server ---");
   const db = client.db(dbName);
 
-  db.collection("partidos").find({}, function (err, cursor) {
-
-    cursor.toArray(function (err, docs) {
-      console.log(docs[0].id_torneo);
-        
       var ObjectId = require('mongodb').ObjectID;
-
-/*         db.collection("torneo").find({"_id": ObjectId(docs[0].id_torneo)}).toArray(function(err, result) {
-          if (err) throw err;
-          console.log("--------------------------------------------")
-          console.log(JSON.stringify(result, undefined, 4));
-          console.log("--------------------------------------------")
-          client.close();
-        });  */
-
         
-      db.collection("partidos").aggregate([
-        {'$match' : {"otro": "nadie"}}, 
+      //Trae Partidos en los que ha participado un equipo
+      /*db.collection("equipos").aggregate([
+      {'$match' : {nombre_eq:"Bayern de Múnich"}},
+      {'$lookup': {
+        'from': "partidos",
+        'localField': "_id",
+        'foreignField': "equipoLocal.id_equipo",
+        'as': "Partidos_Jugados_Local" 
+       }},
         {'$lookup': {
-          'from': "torneo",
-          'localField': "_id",
-          'foreignField': "fk",
-          'as': "alias"
-          }} 
+         'from': "partidos",
+         'localField': "_id",
+         'foreignField': "equipoVisitante.id_equipo",
+         'as': "Partidos_Jugados_Visitante"
+         }} 
+      ]
+      , function(err, res){
+          res.toArray(function(err, doc){
+            console.log(doc)               
+            console.log(JSON.stringify(doc,undefined,4))
+          })
+          
+        }); */
+        
+        
+      /* //Trae Partidos por jugador
+      db.collection("equipos").aggregate([
+        {'$match' : {"plantilla.jugadores.nombre":"Messi"}},
+        { '$project': { "_id": 1 } } 
         ]
         , function(err, res){
             res.toArray(function(err, doc){
-                console.log( doc)
+              console.log(doc)               
+              console.log(JSON.stringify(doc,undefined,3))
+
+        //Trae Partidos en los que ha participado un equipo
+        db.collection("equipos").aggregate([
+              {'$match' : {_id: ObjectId(doc[0]._id)}},
+              {'$lookup': {
+                'from': "partidos",
+                'localField': "_id",
+                'foreignField': "equipoLocal.id_equipo",
+                'as': "Partidos_Jugados_Local" 
+              }},
+                {'$lookup': {
+                'from': "partidos",
+                'localField': "_id",
+                'foreignField': "equipoVisitante.id_equipo",
+                'as': "Partidos_Jugados_Visitante"
+                }} 
+              ]
+              , function(err, res){
+                  res.toArray(function(err, doc){
+                    console.log(doc.Partidos_Jugados_Visitante[0].equipoLocal.id_equipo)               
+                    //console.log(JSON.stringify(doc,undefined,4))
+                    client.close();
+                  })
+                });
+                  
             })
-        client.close();
-      });
-    });
+
+          }); */
+
+
+
+          //Trae Partidos por jugador
+          db.collection("partidos").aggregate([
+            {'$match' : { '$or': [
+                                {"equipoLocal.incidencias.tiros.id_jugador.nombre":"Oblak"},
+                                {"equipoLocal.incidencias.sustituciones.id_jugador.nombre":"Oblak"},
+                                {"equipoLocal.incidencias.faltas.id_jugador.nombre":"Oblak"},
+                                {"equipoLocal.incidencias.goles.id_jugador.nombre":"Oblak"},
+
+                                {"equipoVisitante.incidencias.tiros.id_jugador.nombre":"Oblak"},
+                                {"equipoVisitante.incidencias.sustituciones.id_jugador.nombre":"Oblak"},
+                                {"equipoVisitante.incidencias.faltas.id_jugador.nombre":"Oblak"},
+                                {"equipoVisitante.incidencias.goles.id_jugador.nombre":"Oblak"}
+                              ]
+                        }
+            },
+            { '$project': { "equipoLocal.incidencias": 1,  "equipoLocal.incidencias": 1,  } } 
+            ]
+            , function(err, res){
+                res.toArray(function(err, doc){
+                  //console.log(doc)
+                  try {
+                    doc[0].equipoLocal.incidencias.tiros[0].id_jugador.nombre
+                    doc[0].equipoLocal.incidencias.sustituciones[0].id_jugador.nombre
+                    doc[0].equipoLocal.incidencias.faltas[0].id_jugador.nombre
+                    doc[0].equipoLocal.incidencias.goles[0].id_jugador.nombre
+                  } catch (error) {
+                    console.log(error)
+                  }
+
+
+
+                  //console.log(JSON.stringify(doc,undefined,3))
+                  client.close();
+              });
+        });
+        
 });
 
-  /* 
+
   
+  /* 
   db.collection('partidos').find({
       "$ref" : "torneo",
       "$id" : ObjectId("5fa77c730e2947316854be01"),
@@ -70,5 +142,3 @@ client.connect(function(err, client) {
   })
   
   */
-
-});

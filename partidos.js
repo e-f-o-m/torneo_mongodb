@@ -1,5 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
+const { exit } = require('process');
 const url = 'mongodb://localhost:27017'; // Connection URL
 const dbName = 'torneo_futbol';          // Database Name
 const client = new MongoClient(url);     // Create a new MongoClient
@@ -12,53 +13,48 @@ client.connect(function (err, client) {
     assert.equal(null, err);
     console.log("--- Connected correctly to server ---");
 
-
     const db = client.db(dbName);
 
-    var plantilla;
 
-    var array = db.collection("equipos").aggregate([
-        { '$project': { "plantilla.jugadores": 1, "plantilla.edicion_torneo": 1, "plantilla._id": 1 } }
+    db.collection("equipos").aggregate([
+        { '$project': { "plantilla.jugadores": 1, "plantilla.edicion_torneo": 1, "plantilla._id": 1, "nombre_eq": 1 } }
     ]).toArray(function (err, doc) {
-            //console.log( doc)
-            //doc.forEach(element => console.log(element.plantilla.jugadores.pos)) 
             var objPartidos = [
-                generaPartido( {"id_equipo":doc[0]._id,"id_plantilla":doc[0].plantilla[0]._id,"jugadores":doc[0].plantilla[0].jugadores}, 
-                               {"id_equipo":doc[1]._id,"id_plantilla":doc[1].plantilla[0]._id,"jugadores":doc[1].plantilla[0].jugadores}, 
+                generaPartido( {"nombre_eq":doc[0].nombre_eq,"id_equipo":doc[0]._id,"id_plantilla":doc[0].plantilla[0]._id,"jugadores":doc[0].plantilla[0].jugadores}, 
+                               {"nombre_eq":doc[1].nombre_eq,"id_equipo":doc[1]._id,"id_plantilla":doc[1].plantilla[0]._id,"jugadores":doc[1].plantilla[0].jugadores}, 
                                 "2020/10/10", "2020/10/10"),
-                generaPartido( {"id_equipo":doc[2]._id,"id_plantilla":doc[2].plantilla[0]._id,"jugadores":doc[2].plantilla[0].jugadores}, 
-                               {"id_equipo":doc[3]._id,"id_plantilla":doc[3].plantilla[0]._id,"jugadores":doc[3].plantilla[0].jugadores}, 
+                generaPartido( {"nombre_eq":doc[2].nombre_eq,"id_equipo":doc[2]._id,"id_plantilla":doc[2].plantilla[0]._id,"jugadores":doc[2].plantilla[0].jugadores}, 
+                               {"nombre_eq":doc[3].nombre_eq,"id_equipo":doc[3]._id,"id_plantilla":doc[3].plantilla[0]._id,"jugadores":doc[3].plantilla[0].jugadores}, 
                                 "2020/10/10", "2020/10/10"),
-                generaPartido( {"id_equipo":doc[4]._id,"id_plantilla":doc[4].plantilla[0]._id,"jugadores":doc[4].plantilla[0].jugadores}, 
-                               {"id_equipo":doc[5]._id,"id_plantilla":doc[5].plantilla[0]._id,"jugadores":doc[5].plantilla[0].jugadores}, 
+                generaPartido( {"nombre_eq":doc[4].nombre_eq,"id_equipo":doc[4]._id,"id_plantilla":doc[4].plantilla[0]._id,"jugadores":doc[4].plantilla[0].jugadores}, 
+                               {"nombre_eq":doc[5].nombre_eq,"id_equipo":doc[5]._id,"id_plantilla":doc[5].plantilla[0]._id,"jugadores":doc[5].plantilla[0].jugadores}, 
                                 "2020/10/10", "2020/10/10"),
-                generaPartido( {"id_equipo":doc[6]._id,"id_plantilla":doc[6].plantilla[0]._id,"jugadores":doc[6].plantilla[0].jugadores}, 
-                               {"id_equipo":doc[7]._id,"id_plantilla":doc[7].plantilla[0]._id,"jugadores":doc[7].plantilla[0].jugadores}, 
+                generaPartido( {"nombre_eq":doc[6].nombre_eq,"id_equipo":doc[6]._id,"id_plantilla":doc[6].plantilla[0]._id,"jugadores":doc[6].plantilla[0].jugadores}, 
+                               {"nombre_eq":doc[7].nombre_eq,"id_equipo":doc[7]._id,"id_plantilla":doc[7].plantilla[0]._id,"jugadores":doc[7].plantilla[0].jugadores}, 
                                 "2020/10/10", "2020/10/10"),
-                generaPartido( {"id_equipo":doc[8]._id,"id_plantilla":doc[8].plantilla[0]._id,"jugadores":doc[8].plantilla[0].jugadores}, 
-                               {"id_equipo":doc[9]._id,"id_plantilla":doc[9].plantilla[0]._id,"jugadores":doc[9].plantilla[0].jugadores}, 
+                generaPartido( {"nombre_eq":doc[8].nombre_eq,"id_equipo":doc[8]._id,"id_plantilla":doc[8].plantilla[0]._id,"jugadores":doc[8].plantilla[0].jugadores}, 
+                               {"nombre_eq":doc[9].nombre_eq,"id_equipo":doc[9]._id,"id_plantilla":doc[9].plantilla[0]._id,"jugadores":doc[9].plantilla[0].jugadores}, 
                                 "2020/10/10", "2020/10/10"),
-                generaPartido( {"id_equipo":doc[10]._id,"id_plantilla":doc[10].plantilla[0]._id,"jugadores":doc[10].plantilla[0].jugadores}, 
-                               {"id_equipo":doc[11]._id,"id_plantilla":doc[11].plantilla[0]._id,"jugadores":doc[11].plantilla[0].jugadores}, 
+                generaPartido( {"nombre_eq":doc[10].nombre_eq,"id_equipo":doc[10]._id,"id_plantilla":doc[10].plantilla[0]._id,"jugadores":doc[10].plantilla[0].jugadores}, 
+                               {"nombre_eq":doc[11].nombre_eq,"id_equipo":doc[11]._id,"id_plantilla":doc[11].plantilla[0]._id,"jugadores":doc[11].plantilla[0].jugadores}, 
                                 "2020/10/10", "2020/10/10")
             ]
+            
 
-            console.log(JSON.stringify(objPartidos));
+            //console.log(objPartidos);
+            
 
-            db.collection("partidos").insert([{uno:1},{dos:2}], function(err, resu) {
+            
+            db.collection("partidos").insert(objPartidos, function(err, resu) {
                 assert.equal(null, err);
                 console.log(resu.insertedIds)
                 console.log("Insertado: partidos");
+                client.close();
             });
-            
-            //console.log(JSON.stringify(generaPartido(local, visitante, "2020/10/10", "2020/10/10"), undefined , 3))
 
         })
-    client.close();
 
 });
-
-
 
 
 /*
@@ -96,7 +92,7 @@ function generaPartido(local, visitante, _inicio, _fin) {
     _minuto = Math.round(Math.random() * (90 - 1) + 1);
 
 
-    _nIncidencias =  Math.round(Math.random() * (4 - 0) + 0); 
+    _nIncidencias =  Math.round(Math.random() * (4 - 1) + 1); 
     _arrayIncidencias = [
         {
             tiros:[],
@@ -144,11 +140,13 @@ function generaPartido(local, visitante, _inicio, _fin) {
         arbitros: _arbitro,
         equipoLocal: {
             id_equipo: local.id_equipo,
+            nombre:local.nombre_eq,
             id_plantilla: local.id_plantilla,
             incidencias: _arrayIncidencias[0]
         },
         equipoVisitante: {
             id_equipo: visitante.id_equipo,
+            nombre:visitante.nombre_eq,
             id_plantilla: visitante.id_plantilla,
             incidencias: _arrayIncidencias[1]
         }
