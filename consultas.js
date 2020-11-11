@@ -109,7 +109,10 @@ client.connect(function(err, client) {
               });
         });//fin busqueda */
 
-
+        //** Toda la información de un partido filtrando por torneo y equipo. **
+        //📌 (buscar) partidos -> (un aggregate, un match por equipipo y torneo. (ir hasta incidencias)  y  un group con _id:nombre grupo, resultados[{colombia: GA GC EP...}])
+        
+        
         db.collection("partidos").aggregate([
           {'$match' : {"equipoLocal.incidencias.goles.id_jugador.nombre":"Oblak"} }
           ,{"$group": { "_id": "$equipoLocal.incidencias.goles"} }

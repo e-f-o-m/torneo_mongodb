@@ -39,7 +39,8 @@ client.connect(function (err, client) {
                                 "2020/10/10", "2020/10/10")
             ]
             
-            objPartidos.map(item => console.log(item.incidencias.map(it => it.detalles )));
+            //objPartidos.map(item => console.log(item.incidencias.map(it => it.detalles )));
+            console.log(JSON.stringify(objPartidos, undefined, 4) );
             client.close();
             /* db.collection("partidos").insert(objPartidos, function(err, resu) {
                 assert.equal(null, err);
@@ -54,7 +55,7 @@ client.connect(function (err, client) {
 
 
 function generaPartido(_torneo,_fase,_grupo,local, visitante, _inicio, _fin) {
-    tarjetas = ["Amarilla", "Roja", "azul"];
+    tarjetas = ["Amarilla", "Roja"];
     lugar_tiros = ["Tiro libre dentro del área penal", "Tiro libre directo", "Tiro libre fuera del área de penal", "Penal"];
     arbitros = ["Juan", "Pepe", "Carlos", "Pedro", "Victor", "Roberto", "Simón", "Daniel", "Jhon"];
     ubicaciones = ["San Petersburgo, Rusia", "Foxborough, Estados Unidos", "Seattle, Estados Unidos", "Munich, Alemania", "Atenas, Grecia"];
@@ -73,7 +74,7 @@ function generaPartido(_torneo,_fase,_grupo,local, visitante, _inicio, _fin) {
     _minuto = Math.round(Math.random() * (90 - 1) + 1);
 
     //Incidencias aleatorias
-    _nIncidencias =  Math.round(Math.random() * (4 - 1) + 1); 
+    _nIncidencias =  Math.round(Math.random() * (5 - 1) + 1); 
     _arrayIncidencias = []
     for (i = 0, s = Math.round(Math.random() * (_nIncidencias - 1) + 1); i < s; i++) {
         
@@ -126,12 +127,10 @@ function generaPartido(_torneo,_fase,_grupo,local, visitante, _inicio, _fin) {
         fase:_fase,
         grupo:_grupo,
         equipoLocal: {
-            id_equipo: local.id_equipo,
             nombre:local.nombre_eq,
             id_plantilla: local.id_plantilla,
         },
         equipoVisitante: {
-            id_equipo: visitante.id_equipo,
             nombre:visitante.nombre_eq,
             id_plantilla: visitante.id_plantilla,
         },
