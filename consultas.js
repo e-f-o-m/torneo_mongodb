@@ -78,42 +78,60 @@ client.connect(function(err, client) {
 
 
           //Trae Partidos por jugador
-          db.collection("partidos").aggregate([
-            {'$match' : { '$or': [
+          /* db.collection("partidos").aggregate([
+              {'$match' : { '$or': [
                                 {"equipoLocal.incidencias.tiros.id_jugador.nombre":"Oblak"},
                                 {"equipoLocal.incidencias.sustituciones.id_jugador.nombre":"Oblak"},
                                 {"equipoLocal.incidencias.faltas.id_jugador.nombre":"Oblak"},
                                 {"equipoLocal.incidencias.goles.id_jugador.nombre":"Oblak"},
-
                                 {"equipoVisitante.incidencias.tiros.id_jugador.nombre":"Oblak"},
                                 {"equipoVisitante.incidencias.sustituciones.id_jugador.nombre":"Oblak"},
                                 {"equipoVisitante.incidencias.faltas.id_jugador.nombre":"Oblak"},
                                 {"equipoVisitante.incidencias.goles.id_jugador.nombre":"Oblak"}
                               ]
                         }
-            },
-            { '$project': { "equipoLocal.incidencias": 1,  "equipoLocal.incidencias": 1,  } } 
+              },
+              { '$project': { 
+                  "equipoLocal.incidencias.goles": {'$filter': {
+                      'input': "$equipoLocal.incidencias.goles",
+                      'as': "list",
+                      'cond': {$eq: ['$$list.id_jugador.nombre', "Oblak"]} //<-- filter sub-array based on condition
+                  }
+                }          
+              }
+            }
             ]
             , function(err, res){
                 res.toArray(function(err, doc){
-                  //console.log(doc)
-                  try {
-                    doc[0].equipoLocal.incidencias.tiros[0].id_jugador.nombre
-                    doc[0].equipoLocal.incidencias.sustituciones[0].id_jugador.nombre
-                    doc[0].equipoLocal.incidencias.faltas[0].id_jugador.nombre
-                    doc[0].equipoLocal.incidencias.goles[0].id_jugador.nombre
-                  } catch (error) {
-                    console.log(error)
-                  }
-
-
-
-                  //console.log(JSON.stringify(doc,undefined,3))
+                  console.log(JSON.stringify(doc, undefined, 4))
                   client.close();
+
               });
-        });
+        });//fin busqueda */
+
+
+        db.collection("partidos").aggregate([
+          {'$match' : {"equipoLocal.incidencias.goles.id_jugador.nombre":"Oblak"} }
+          ,{"$group": { "_id": "$equipoLocal.incidencias.goles"} }
+          ,{ '$project': { 
+            "_id": {'$filter': {
+                'input': "$_id.id_jugador",
+                'as': "list",
+                'cond': {$eq: ['$$list.nombre', "Oblak"]} //<-- filter sub-array based on condition
+              }
+            }
+          }       
+        }
+        ],
+          function(err, res){
+            res.toArray(function(err, doc){
+              console.log(JSON.stringify(doc, undefined, 4));
+              client.close();
+          });
+    });//fin busqueda
+
         
-});
+});//fin conect
 
 
   
