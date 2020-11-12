@@ -5,15 +5,16 @@
 
 4. Un archivo js (consultas.js) con las consultas que respondan a las siguientes preguntas:
 ------------------------------------------------------------------------------------------
-- ** Consultar la plantilla (jugadores) de los equipos en cada edición de los torneos. **
+- ** 1 Consultar la plantilla (jugadores) de los equipos en cada edición de los torneos. **
 
-- ** Clasificación final en cada grupo. **
+- ** 2 Clasificación final en cada grupo. **
 
-- ** Toda la información de un partido filtrando por torneo y equipo. **
+- ** 3 Toda la información de un partido filtrando por torneo y equipo. **
 
-- ** Dado un jugador y un torneo ver los partidos en los que participó. **
+- ** 4 Dado un jugador y un torneo ver los partidos en los que participó. **
 
-- ** Ver la información de las incidencias, minuto, equipo, etc. **
+- ** 5 Ver la información de las incidencias de un jugador en un torneo, que incluya tipo 
+      de incidencia, minuto, equipo, etc.**
 ------------------------------------------------------------------------------------------
 
 ### pendiente:

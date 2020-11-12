@@ -1,4 +1,5 @@
-[{
+[
+    {
     "nombre_eq": "Atlético de Madrid ",
     "plantilla": [
         {
@@ -213,7 +214,8 @@
             ]
         }
     ]
-}]
+}
+]
 
 
 
