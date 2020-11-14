@@ -1,7 +1,6 @@
 use('torneo_futbol');
-
+/*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 //1. Consultar la plantilla (jugadores) de los equipos en cada edición de los torneos.
-//En la colección equipos está todo
 db.equipos.aggregate([      
     {$project:{
             "nombre_eq": 1,
@@ -11,16 +10,23 @@ db.equipos.aggregate([
     }
 ]).pretty();
 
+/*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+//2. Clasificación final en cada grupo.
+torneo = 'Liga de Campeones 2020';
+db.torneo.aggregate([
+    { $match: { 'ediciones.nombre_e':torneo}},
+    { $group: { _id: "$ediciones"}
+    }
+]).pretty();
 
-//- ** 2 Clasificación final en cada grupo. ** paila, aún no está
 
-
+/*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 // 3. Toda la información de un partido filtrando por torneo y equipo.
-//Opción 1//db.partidos.find({$or:[{"equipoLocal.nombre": "Manchester City"},{"equipoVisitante.nombre": "Manchester City"}]}).pretty();
 equipo_buscar = 'Piemonte Calcio';
-equipo_buscar = '2020';
+torneo = 'Liga de Campeones 2020';
 db.partidos.aggregate([
-    { $match: { $or: [{'equipoVisitante.nombre':equipo_buscar },{'equipoLocal.nombre':equipo_buscar}]}}
+    { $match: { $or: [{'equipoVisitante.nombre':equipo_buscar },{'equipoLocal.nombre':equipo_buscar}]}},
+    { $match: { 'torneo':torneo}}
     ,{$set: 
         {'Goles Equipo Buscado':
             { $size:{$filter: {input: "$incidencias",as: "list",cond: {
@@ -47,35 +53,72 @@ db.partidos.aggregate([
 ]).pretty();
 
 
+/*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 //4. Dado un jugador y un torneo ver los partidos en los que participó.
-//Messi
-torneo = 'torneo';
-jugador_buscar = '5faabc2be46ad90480d991aa';  //falta el nombre. anidar plantilla completa
+torneo = 'Liga de Campeones 2020';
+jugador_buscar = 'Messi';  //falta el nombre. anidar plantilla completa
 db.partidos.find({
     $and:[
         {$or:[
-            {'equipoVisitante.id_plantilla':jugador_buscar },
-            {'equipoLocal.id_plantilla':jugador_buscar}]},
+            {'equipoVisitante.plantilla':jugador_buscar },
+            {'equipoLocal.plantilla':jugador_buscar}]},
         {'torneo':torneo},    
     ]
 }).pretty();
 
 
+/*- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 //5. Ver la información de las incidencias de un jugador en un torneo, que incluya tipo de incidencia, minuto, equipo, etc.
-//Messi
-torneo = 'torneo';
-jugador_buscar = 'Aymeric Laporte';  //falta el nombre. anidar plantilla completa
+torneo = 'Liga de Campeones 2020';
+jugador_buscar = 'Jan Vertonghen';
 db.partidos.aggregate([
     {$match:{$and:[
                 {$or:[
-                    {'equipoVisitante.id_plantilla.nombre':jugador_buscar },
-                    {'equipoLocal.id_plantilla.nombre':jugador_buscar}]},
+                    {'equipoVisitante.plantilla':jugador_buscar },
+                    {'equipoLocal.plantilla':jugador_buscar}]},
                 {'torneo':torneo}
-    ]}}
-     ,
+    ]}},
+    {$project:{"incidencias_": {$filter: {input: "$incidencias",as: "list",cond: {
+                        $eq: ['$$list.jugador', jugador_buscar]
+                    }}}
+                }
+    },
     {$group: { 
-        _id: "$incidencias"
+        _id: "$incidencias_.incidencia"
         } 
     }
 ]).pretty();
 
+
+
+
+
+// De esta forma se buscó la infromación para llenar las tablas de resultados
+/* equipo_buscar = "Atlético de Madrid ";
+equipo_buscar = "Barcelona";
+equipo_buscar = "Bayern de Múnich";
+equipo_buscar = "Chelsea";
+equipo_buscar = "Liverpool";
+equipo_buscar = "Manchester City";
+equipo_buscar = "Manchester United";
+equipo_buscar = "Nápoles";
+equipo_buscar = "Piemonte Calcio";
+equipo_buscar = "PSG";
+equipo_buscar = "Real Madrid"; */
+equipo_buscar = "Tottenham";
+torneo = 'Liga de Campeones 2020';
+db.partidos.aggregate([
+    { $match: { $or: [{'equipoVisitante.nombre':equipo_buscar },{'equipoLocal.nombre':equipo_buscar}]}},
+    { $match: { 'torneo':torneo}}
+    ,{$set: 
+        {'buscado_GF':
+            { $size:{$filter: {input: "$incidencias",as: "list",cond: {
+                        $and:[{$eq: ['$$list.nombre_equipo', equipo_buscar]},
+                            {$eq: ['$$list.tipo_incidencia', "gol"]}]}}}},
+        'contrario_GC':
+            { $size:{$filter: {input: "$incidencias",as: "list",cond: {
+                        $and:[{$ne: ['$$list.nombre_equipo', equipo_buscar]},
+                            {$eq: ['$$list.tipo_incidencia', "gol"]}]}}}}}},
+    {$project:{
+            busco: equipo_buscar, grupo: "$grupo",e_local: "$equipoLocal.nombre",e_visit: "$equipoVisitante.nombre",
+            bu_GF: "$bu_GF",co_GC: "$co_GC"}}]).pretty();

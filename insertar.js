@@ -12,8 +12,8 @@ client.connect(function (err, client) {
     const db = client.db(dbName);
 
     //insertar Edición en colección torneo
-    objEdicion = {ediciones: [{nombre_e: "2020"}]};
-    db.collection("torneo").insertOne(objEdicion, function(err, res) {
+    objEdicion = { ediciones: [{ nombre_e: "2020" }] };
+    db.collection("torneo").insertOne(objEdicion, function (err, res) {
         assert.equal(null, err);
         console.log(res.insertedId)
         console.log("creado: solo edicion");
@@ -40,7 +40,7 @@ client.connect(function (err, client) {
                 ]
             }
         ]
-    },{
+    }, {
         nombre_eq: "Barcelona",
         plantilla: [
             {
@@ -58,7 +58,7 @@ client.connect(function (err, client) {
                 ]
             }
         ]
-    },{
+    }, {
         nombre_eq: "Bayern de Múnich",
         plantilla: [
             {
@@ -66,7 +66,7 @@ client.connect(function (err, client) {
                 _id: new ObjectID(),
                 jugadores: [
                     { _id: new ObjectID(), nombre: "Mohamed Salah ", pos: 1, "altura": 181, edad: 39 },
-                    { _id: new ObjectID(), nombre: "Griezmann", pos: 20, "altura": 182, edad:28 },
+                    { _id: new ObjectID(), nombre: "Griezmann", pos: 20, "altura": 182, edad: 28 },
                     { _id: new ObjectID(), nombre: "Cavani", pos: 32, "altura": 187, edad: 37 },
                     { _id: new ObjectID(), nombre: "Fernandinho", pos: 44, "altura": 184, edad: 26 },
                     { _id: new ObjectID(), nombre: "Joshua Kimmich", pos: 56, "altura": 181, edad: 23 },
@@ -76,7 +76,7 @@ client.connect(function (err, client) {
                 ]
             }
         ]
-    },{
+    }, {
         nombre_eq: "Chelsea",
         plantilla: [
             {
@@ -84,7 +84,7 @@ client.connect(function (err, client) {
                 _id: new ObjectID(),
                 jugadores: [
                     { _id: new ObjectID(), nombre: "Mbappé", pos: 1, "altura": 192, edad: 19 },
-                    { _id: new ObjectID(), nombre: "De Gea", pos: 23, "altura": 197, edad:29 },
+                    { _id: new ObjectID(), nombre: "De Gea", pos: 23, "altura": 197, edad: 29 },
                     { _id: new ObjectID(), nombre: "David Silva", pos: 35, "altura": 193, edad: 27 },
                     { _id: new ObjectID(), nombre: "Bernardo Silva", pos: 47, "altura": 181, edad: 38 },
                     { _id: new ObjectID(), nombre: "Di María", pos: 59, "altura": 192, edad: 31 },
@@ -94,7 +94,7 @@ client.connect(function (err, client) {
                 ]
             }
         ]
-    },{
+    }, {
         nombre_eq: "Liverpool",
         plantilla: [
             {
@@ -102,7 +102,7 @@ client.connect(function (err, client) {
                 _id: new ObjectID(),
                 jugadores: [
                     { _id: new ObjectID(), nombre: "Van Dijk", pos: 1, "altura": 198, edad: 29 },
-                    { _id: new ObjectID(), nombre: "Alisson", pos: 19, "altura": 196, edad:35 },
+                    { _id: new ObjectID(), nombre: "Alisson", pos: 19, "altura": 196, edad: 35 },
                     { _id: new ObjectID(), nombre: "Pogba", pos: 31, "altura": 197, edad: 27 },
                     { _id: new ObjectID(), nombre: "Mats Hummels", pos: 43, "altura": 193, edad: 21 },
                     { _id: new ObjectID(), nombre: "Keylor Navas", pos: 55, "altura": 191, edad: 40 },
@@ -112,7 +112,7 @@ client.connect(function (err, client) {
                 ]
             }
         ]
-    },{
+    }, {
         nombre_eq: "Manchester City",
         plantilla: [
             {
@@ -120,7 +120,7 @@ client.connect(function (err, client) {
                 _id: new ObjectID(),
                 jugadores: [
                     { _id: new ObjectID(), nombre: "Kevin de Bruyne", pos: 1, "altura": 186, edad: 37 },
-                    { _id: new ObjectID(), nombre: "Kalidou Koulibaly", pos: 17, "altura": 176, edad:33 },
+                    { _id: new ObjectID(), nombre: "Kalidou Koulibaly", pos: 17, "altura": 176, edad: 33 },
                     { _id: new ObjectID(), nombre: "Kroos", pos: 29, "altura": 191, edad: 30 },
                     { _id: new ObjectID(), nombre: "Benzema", pos: 41, "altura": 170, edad: 41 },
                     { _id: new ObjectID(), nombre: "Lorenzo Insigne", pos: 53, "altura": 185, edad: 21 },
@@ -130,7 +130,7 @@ client.connect(function (err, client) {
                 ]
             }
         ]
-    },{
+    }, {
         nombre_eq: "Manchester United",
         plantilla: [
             {
@@ -138,7 +138,7 @@ client.connect(function (err, client) {
                 _id: new ObjectID(),
                 jugadores: [
                     { _id: new ObjectID(), nombre: "Sergio Ramos", pos: 1, "altura": 178, edad: 40 },
-                    { _id: new ObjectID(), nombre: "Raheem Sterling", pos: 24, "altura": 197, edad:32 },
+                    { _id: new ObjectID(), nombre: "Raheem Sterling", pos: 24, "altura": 197, edad: 32 },
                     { _id: new ObjectID(), nombre: "Hugo Lloris", pos: 36, "altura": 175, edad: 22 },
                     { _id: new ObjectID(), nombre: "Thiago", pos: 48, "altura": 179, edad: 25 },
                     { _id: new ObjectID(), nombre: "Alexandre Lacazette", pos: 60, "altura": 191, edad: 36 },
@@ -148,7 +148,7 @@ client.connect(function (err, client) {
                 ]
             }
         ]
-    },{
+    }, {
         nombre_eq: "Nápoles",
         plantilla: [
             {
@@ -156,7 +156,7 @@ client.connect(function (err, client) {
                 _id: new ObjectID(),
                 jugadores: [
                     { _id: new ObjectID(), nombre: "Ter Stegen", pos: 10, "altura": 172, edad: 39 },
-                    { _id: new ObjectID(), nombre: "Luis Suárez", pos: 22, "altura": 184, edad:18 },
+                    { _id: new ObjectID(), nombre: "Luis Suárez", pos: 22, "altura": 184, edad: 18 },
                     { _id: new ObjectID(), nombre: "Ederson", pos: 34, "altura": 175, edad: 41 },
                     { _id: new ObjectID(), nombre: "Toby Alderweireld", pos: 46, "altura": 192, edad: 32 },
                     { _id: new ObjectID(), nombre: "Pjanić", pos: 58, "altura": 179, edad: 32 },
@@ -184,7 +184,7 @@ client.connect(function (err, client) {
                 ]
             }
         ]
-    },{
+    }, {
         nombre_eq: "PSG",
         plantilla: [
             {
@@ -202,7 +202,7 @@ client.connect(function (err, client) {
                 ]
             }
         ]
-    },{
+    }, {
         nombre_eq: "Real Madrid",
         plantilla: [
             {
@@ -239,7 +239,7 @@ client.connect(function (err, client) {
             }
         ]
     }]
-    db.collection("equipos").insertMany(objEquipos, function(err, res) {
+    db.collection("equipos").insertMany(objEquipos, function (err, res) {
         assert.equal(null, err);
         console.log(res.insertedIds)
         console.log("Insertado: equipos");
@@ -255,41 +255,72 @@ client.connect(function (err, client) {
 
 
     //Insertar los grupos y sus resultados manualmente en la colección trorneo
-    objGruposResl = [{
-                nombre:"Grupo A",
-                grupoA:[
-                    {Posicion: "1",Equipo: "Barcelona",PG: "2",PE: "3",PP: "1",GF: "12",GC: "6",GD: "6",Puntos: "9" },
-                    {Posicion: "2",Equipo: "Piemonte Calcio",PG: "2",PE: "2",PP: "2",GF: "13",GC: "5",GD: "8",Puntos: "8"},
-                    {Posicion: "3",Equipo: "PSG",PG: "1",PE: "3",PP: "2",GF: "7",GC: "8",GD: "1",Puntos: "6" },
-                    {Posicion: "4",Equipo: "Real Madrid",PG: "1",PE: "1",PP: "4",GF: "8",GC: "10",GD: "2",Puntos: "4"}
-                ]
-            },
-            {   nombre:"Grupo B",
-                grupoB:[
-                    {Posicion: "1",Equipo: "Manchester City",PG: "3",PE: "3",PP: "0",GF: "10",GC: "6",GD: "4",Puntos: "12"    },
-                    {Posicion: "2",Equipo: "Atlético de Madrid",PG: "3",PE: "2",PP: "1",GF: "7",GC: "3",GD: "4",Puntos: "11"        },
-                    {Posicion: "3",Equipo: "Liverpool",PG: "1",PE: "2",PP: "4",GF: "3",GC: "7",GD: "4",Puntos: "5"},
-                    {Posicion: "4",Equipo: "Bayern de Múnich",PG: "1",PE: "0",PP: "5",GF: "3",GC: "10",GD: "7",Puntos: "3"}
-                ]                           
-            },
-            {   nombre:"Grupo C",
-                grupoC:[
-                    {Posicion: "1",Equipo: "Tottenham",PG: "2",PE: "2",PP: "2",GF: "12",GC: "7",GD: "5",Puntos: "8"},
-                    {Posicion: "2",Equipo: "Nápoles",PG: "2",PE: "1",PP: "3",GF: "5",GC: "2",GD: "3",Puntos: "7"   },
-                    {Posicion: "3",Equipo: "Chelsea",PG: "1",PE: "1",PP: "4",GF: "7",GC: "8",GD: "1",Puntos: "4"   },
-                    {Posicion: "4",Equipo: "Manchester United",PG: "1",PE: "0",PP: "5",GF: "1",GC: "8",GD: "2",Puntos: "3"}
-                ]
-        }]
+    /* 
 
-    db.collection('torneo').updateOne( 
-        { "ediciones.nombre_e":"2020" },
-        {$set: {"ediciones.$.clasificacion_grupos": objGruposResl } },
-        function(err, res) {
+    *Posicion
+    *Equipo 
+    
+    *PG = partidos ganados
+    
+    *PE = partidos empatados
+    
+    *PP = partidos perdidos
+
+    *GF = goles a favor
+    *GC = goles en contra
+    *GD = difrerencia de goles
+    
+    Puntos
+    
+    */
+
+
+
+
+
+
+
+
+    objGruposResl = [{
+        nombre: "a",
+        grupoA: [
+            { Posicion: "1", Equipo: "Chelsea", PG: "2", PE: "0", PP: "0", GF: "2",  GC: "0",  GD: "2", Puntos: "6" },
+            { Posicion: "2", Equipo: "Atlético de Madrid ", PG: "1", PE: "1", PP: "0", GF: "1",  GC: "0",  GD: "1", Puntos: "4" },
+            { Posicion: "3", Equipo: "Bayern de Múnich", PG: "0", PE: "1", PP: "1", GF: "0",  GC: "1",  GD: "-1", Puntos: "1" },
+            { Posicion: "4", Equipo: "Barcelona", PG: "0", PE: "0", PP: "2", GF: "0",  GC: "2",  GD: "-2", Puntos: "0" }
+        ]
+    },
+    {
+        nombre: "b",
+        grupoB: [
+            { Posicion: "1", Equipo: "Nápoles", PG: "1", PE: "1", PP: "0", GF: "1",  GC: "0",  GD: "1", Puntos: "4" },
+            { Posicion: "2", Equipo: "Manchester United", PG: "1", PE: "0", PP: "1", GF: "1",  GC: "1",  GD: "0", Puntos: "3" },
+            { Posicion: "3", Equipo: "Liverpool", PG: "0", PE: "2", PP: "0", GF: "0",  GC: "0",  GD: "0", Puntos: "2" },
+            { Posicion: "4", Equipo: "Manchester City", PG: "0", PE: "1", PP: "1", GF: "0",  GC: "1",  GD: "-1", Puntos: "1" }
+        ]
+    },
+    {
+        nombre: "c",
+        grupoC: [
+            { Posicion: "1", Equipo: "Tottenham", PG: "1", PE: "1", PP: "0", GF: "2",  GC: "0",  GD: "2", Puntos: "4" },
+            { Posicion: "2", Equipo: "PSG", PG: "1", PE: "1", PP: "0", GF: "1",  GC: "0",  GD: "1", Puntos: "4" },
+            { Posicion: "3", Equipo: "Piemonte Calcio", PG: "0", PE: "2", PP: "0", GF: "0",  GC: "0",  GD: "0", Puntos: "2" },
+            { Posicion: "4", Equipo: "Real Madrid", PG: "0", PE: "1", PP: "1", GF: "0",  GC: "1",  GD: "-1", Puntos: "1" }
+        ]
+    }]
+
+
+
+
+    db.collection('torneo').updateOne(
+        { "ediciones.nombre_e": "2020" },
+        { $set: { "ediciones.$.clasificacion_grupos": objGruposResl } },
+        function (err, res) {
             assert.equal(null, err);
             console.log(res.result);
             console.log("Insertado: Grupos y sus resultados");
             client.close();
-    });
+        });
 
 
     /*
